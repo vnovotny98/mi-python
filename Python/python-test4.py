@@ -2,7 +2,7 @@
 from numpy import arange
 from numpy import meshgrid
 from matplotlib import pyplot
-
+####COM
 # objective function
 def objective(x, y):
 	return x**2.0 + y**2.0
