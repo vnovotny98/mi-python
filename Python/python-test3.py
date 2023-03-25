@@ -1,3 +1,5 @@
+#Funkcni
+
 # line plot of input vs result for a 1d objective function and show optima
 from numpy import arange
 from matplotlib import pyplot

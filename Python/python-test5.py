@@ -1,7 +1,9 @@
+#Funkcni
+
 # surface plot for 2d objective function
 from numpy import arange
 from numpy import meshgrid
-from matplotlib import pyplot
+import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # objective function
@@ -18,8 +20,10 @@ x, y = meshgrid(xaxis, yaxis)
 # compute targets
 results = objective(x, y)
 # create a surface plot with the jet color scheme
-figure = pyplot.figure()
-axis = figure.gca(projection='3d')
+fig = plt.figure()
+axis = fig.add_subplot(projection='3d')
+#figure = pyplot.figure()
+#axis = figure.gca(projection='3d')
 axis.plot_surface(x, y, results, cmap='jet')
 # show the plot
-pyplot.show()
+plt.show()
