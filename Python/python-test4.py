@@ -1,3 +1,5 @@
+#Funkcni
+
 # contour plot for 2d objective function
 from numpy import arange
 from numpy import meshgrid

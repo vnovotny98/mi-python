@@ -1,3 +1,5 @@
+#Funkcni
+
 # scatter plot of input vs result for a 1d objective function
 from numpy import arange
 from matplotlib import pyplot
