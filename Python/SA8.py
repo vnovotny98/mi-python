@@ -2,84 +2,91 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# define 1st Dejong function
+# Vydefinovani funkce 1st Dejong pro x dimenzionalni prostor
 def dejong1(x):
     return sum(xi ** 2 for xi in x)
 
 
-# define 2nd Dejong function
+# Vydefinovani funkce 2nd Dejong pro x dimenzionalni prostor
 def dejong2(x):
     assert len(x) >= 2
     x = np.asarray(x)
     return np.sum(100.0 * (x[1:] - x[:-1] ** 2.0) ** 2.0 + (1 - x[:-1]) ** 2.0)
 
 
-# define Schwefel function
+# Vydefinovani schwefel funkce pro x dimenzionalni prostor
 def schwefel(x):
     n = len(x)
     return 418.9829 * n - np.sum([xi * np.sin(np.sqrt(abs(xi))) for xi in x])
 
 
-# define Random Search algorithm
+# Random Search
 def random_search(objective_func, dim, n_iter, bounds):
+    # Inicializace: Nastaveni best_solutions na prazdne, best_fitness na nejvetsi moznou hodnotu
     best_solution_rs = None
     best_fitness_rs = float('inf')
     fitness_progress_rs = []
 
     for i in range(n_iter):
-        # generate a random solution
+        # vygenerovani nahodneho kandidata
         candidate_solution_rs = np.random.uniform(bounds[0], bounds[1], dim)
         candidate_fitness_rs = objective_func(candidate_solution_rs)
 
-        # compare fitness with best solution
+        # porovnani fitness kandidata a doposud nejlepsiho reseni
         if candidate_fitness_rs < best_fitness_rs:
             best_solution_rs = candidate_solution_rs
             best_fitness_rs = candidate_fitness_rs
 
+        # pridani best_fitness do pole fitness_progress
         fitness_progress_rs.append(best_fitness_rs)
 
 
-    # return the best solution and fitness value
+    # funkce vraci tyto hodnoty, pole
     return best_solution_rs, best_fitness_rs, fitness_progress_rs
 
 
 # define Simulated Annealing algorithm
 def simulated_annealing(objective_func, dim, n_iter, bounds, initial_temperature, final_temperature, cooling_rate):
+    # vygenerovani nahodneho kandidata
     current_solution_sa = np.random.uniform(bounds[0], bounds[1], dim)
     current_fitness_sa = objective_func(current_solution_sa)
+    # Inicializace: z prave vygenerovanych hodnot udela nejlepsi a algoritmus muze zacit, akorat pro n -1, protoze prvni prvek uz je vygenerovan
     best_solution_sa = current_solution_sa
     best_fitness_sa = current_fitness_sa
     fitness_progress_sa = [best_fitness_sa]
 
     for i in range(n_iter-1):
-        # adjust the temperature
+        # exponencialni ochlazovani
         temperature = initial_temperature * ((final_temperature/initial_temperature) ** (i/n_iter))
 
-        # generate a candidate solution
-        candidate_solution_sa = current_solution_sa + np.random.normal(0, 1, dim)
+        # vygenerovani nahodneho kandidata - Nejprve se vytvori nove kandidatní reseni pridanim nahodného sumu
+        # candidate_solution_sa = current_solution_sa + np.random.normal(0, 1, dim)
+        candidate_solution_sa = current_solution_sa + np.random.uniform(-0.1*(bounds[1]-bounds[0]), 0.1*(bounds[1]-bounds[0]), dim)
+        # omezeni jej na urcený interval, aby se zajistilo, ze nove reseni bude v souladu s danymi omezenimi.
         candidate_solution_sa = np.clip(candidate_solution_sa, bounds[0], bounds[1])
+        # vypocet fitness hodnoty
         candidate_fitness_sa = objective_func(candidate_solution_sa)
 
-        # check if the candidate solution is better than the current solution
+        # kontrola zda je kandidatni reseni lepsi nez aktualni reseni
         if candidate_fitness_sa < current_fitness_sa:
             current_solution_sa = candidate_solution_sa
             current_fitness_sa = candidate_fitness_sa
 
-            # check if the candidate solution is better than the best solution
+            # kontrola zda je kandidatni reseni lepsi nez nejlepsi reseni
             if candidate_fitness_sa < best_fitness_sa:
                 best_solution_sa = candidate_solution_sa
                 best_fitness_sa = candidate_fitness_sa
         else:
-            # calculate the acceptance probability
+            # vypocet akceptovani zhorseneho vyyledku
             acceptance_prob = np.exp(-(candidate_fitness_sa - current_fitness_sa) / temperature)
 
-            # determine whether to accept the candidate solution
+            # rozhodnuti zda akceptovat zhorseni vysledku
             if np.random.random() < acceptance_prob:
                 current_solution_sa = candidate_solution_sa
                 current_fitness_sa = candidate_fitness_sa
 
         fitness_progress_sa.append(best_fitness_sa)
-# return the best solution and fitness value
+    # funkce vraci tyto hodnoty, pole
     return best_solution_sa, best_fitness_sa, fitness_progress_sa
 
 
@@ -136,6 +143,7 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     # print(f"Mean: {func.__name__}-{dim} : {np.mean(all_best_fitness_rs)}")
     # print(f"Median: {func.__name__}-{dim} : {np.median(all_best_fitness_rs)}")
     # print(f"Standard deviation: {func.__name__}-{dim} : {np.std(all_best_fitness_rs)}\n\n")
+    print(f"Cooling rate: {((final_temperature / initial_temperature) ** (1 / n_iter))}\n")
 
     # set the plot title and axis labels
     #plt.title(f'{func.__name__}-{dim}')
