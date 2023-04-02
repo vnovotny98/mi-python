@@ -1,9 +1,24 @@
-import random
 import math
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+
+# define 1st Dejong function
+def dejong1(x):
+    return sum(xi ** 2 for xi in x)
 
 
+# define 2nd Dejong function
 def dejong2(x):
-    return 100 * (x[0] ** 2 - x[1]) ** 2 + (1 - x[0]) ** 2
+    assert len(x) >= 2
+    x = np.asarray(x)
+    return np.sum(100.0 * (x[1:] - x[:-1] ** 2.0) ** 2.0 + (1 - x[:-1]) ** 2.0)
+
+
+# define Schwefel function
+def schwefel(x):
+    n = len(x)
+    return 418.9829 * n - np.sum([xi * np.sin(np.sqrt(abs(xi))) for xi in x])
 
 
 def simulated_annealing(f, bounds, initial_temp, final_temp, max_iter):

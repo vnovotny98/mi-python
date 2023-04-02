@@ -85,7 +85,7 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     plt.title(f'{func.__name__}-{dim}')
     plt.xlabel('Number of iterations')
     plt.ylabel('Fitness')
-    plt.legend()
+    # plt.legend()
 
     # save the plot
     plt.savefig(f'C:/Users/vnovotny/Desktop/Garbage/{func.__name__}-{dim}-fitness-progress.png')
@@ -108,7 +108,7 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     plt.legend()
 
     # save the plot
-    plt.savefig(f'C:/Users/vnovotny/Desktop/Garbage/second_plot_{func.__name__}-{dim}-min-mean.png')
+    plt.savefig(f'C:/Users/vnovotny/Desktop/Garbage/{func.__name__}-{dim}-min-mean.png')
 
     # clear the current figure
     plt.clf()

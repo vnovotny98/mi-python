@@ -1,12 +1,24 @@
 import math
 import random
-from numpy import asarray
-from numpy import sum as numpysum
+import numpy as np
+import matplotlib.pyplot as plt
 
+# define 1st Dejong function
+def dejong1(x):
+    return sum(xi ** 2 for xi in x)
+
+
+# define 2nd Dejong function
 def dejong2(x):
     assert len(x) >= 2
-    x = asarray(x)
-    return numpysum(100.0 * (x[1:] - x[:-1] ** 2.0) ** 2.0 + (1 - x[:-1]) ** 2.0)
+    x = np.asarray(x)
+    return np.sum(100.0 * (x[1:] - x[:-1] ** 2.0) ** 2.0 + (1 - x[:-1]) ** 2.0)
+
+
+# define Schwefel function
+def schwefel(x):
+    n = len(x)
+    return 418.9829 * n - np.sum([xi * np.sin(np.sqrt(abs(xi))) for xi in x])
 
 
 def simulated_annealing(f, bounds, max_iter, initial_temp, cooling_rate):
@@ -46,10 +58,10 @@ def simulated_annealing(f, bounds, max_iter, initial_temp, cooling_rate):
 
 
 # Define the bounds of the search space
-bounds = [(-5.12, 5.12)] * 2
+bounds = [(-5, 5)] * 2
 
 # Perform the simulated annealing search
-best_solution, best_fitness = simulated_annealing(dejong2, bounds, max_iter=1000, initial_temp=100, cooling_rate=0.83)
+best_solution, best_fitness = simulated_annealing(dejong2, bounds, max_iter=1000, initial_temp=10, cooling_rate=0.83)
 
 # Print the results
 print("Best solution:", best_solution)
