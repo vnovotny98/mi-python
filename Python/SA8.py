@@ -46,7 +46,7 @@ def random_search(objective_func, dimens, n_iters, f_bounds):
 
 
 # define Simulated Annealing algorithm
-def simulated_annealing(objective_func, dimensions, n_iter_f, bounds_f, initial_temperature_f, final_temperature_f, cooling_rate_f):
+def simulated_annealing(objective_func, dimensions, n_iter_f, bounds_f, temperature_f, cooling_rate_f):
     # vygenerovani nahodneho kandidata
     current_solution_sa = np.random.uniform(bounds_f[0], bounds_f[1], dimensions)
     current_fitness_sa = objective_func(current_solution_sa)
@@ -62,7 +62,8 @@ def simulated_annealing(objective_func, dimensions, n_iter_f, bounds_f, initial_
     for i_f in range(n_iter_f-1):
         # exponencialni ochlazovani
         # temperature = initial_temperature * ((final_temperature_f/initial_temperature_f) ** (i/n_iter))
-        temperature_f = initial_temperature_f * ((final_temperature_f/initial_temperature_f) ** (i/n_iter_f))
+        #temperature_f = initial_temperature_f * ((final_temperature_f/initial_temperature_f) ** (i/n_iter_f))
+        temperature_f *= cooling_rate_f
 
         # vygenerovani nahodneho kandidata - Nejprve se vytvori nove kandidatní reseni pridanim nahodného sumu
         candidate_solution_sa = current_solution_sa + np.random.uniform(-0.1*okoli, 0.1*okoli, dimensions)
@@ -130,7 +131,7 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
     for j in range(num_runs):
         best_solution_rs, best_fitness_rs, fitness_progress_rs = random_search(func, dim, n_iter_rs, bound)
-        best_solution_sa, best_fitness_sa, fitness_progress_sa = simulated_annealing(func, dim, n_iter_rs, bound, initial_temperature, final_temperature, cooling_rate)
+        best_solution_sa, best_fitness_sa, fitness_progress_sa = simulated_annealing(func, dim, n_iter_rs, bound, temperature, cooling_rate)
         best_fitnesses_rs.append(best_fitness_rs)
         best_fitnesses_sa.append(best_fitness_sa)
         best_fitness_for_run_rs.append(fitness_progress_rs)  # přidání hodnoty do pole
