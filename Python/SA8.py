@@ -89,12 +89,12 @@ def simulated_annealing(objective_func, dimensions, n_iter_f, bounds_f, temperat
                     current_solution_sa = candidate_solution_sa
                     current_fitness_sa = candidate_fitness_sa
 
-            ###### I AM NOT SURE HERE   #######
+            # I AM NOT SURE HERE   #######
             # Update the best fitness and solution if necessary (in case a better solution was found in the inner loop)
-            # current_best_fitness = current_fitness_sa
-            # if current_best_fitness < best_fitness_sa_f:
-                # best_fitness_sa_f = current_best_fitness
-                # best_solution_sa_f = current_solution_sa
+                    current_best_fitness = current_fitness_sa
+                    if current_best_fitness < best_fitness_sa_f:
+                        best_fitness_sa_f = current_best_fitness
+                        best_solution_sa_f = current_solution_sa
 
             fitness_progress_sa_f.append(best_fitness_sa_f)
         # funkce vraci tyto hodnoty, pole
@@ -109,13 +109,12 @@ functions = [dejong1, dejong2, schwefel, dejong1, dejong2, schwefel]
 bounds = [(-5, 5), (-5, 5), (-500, 500), (-5, 5), (-5, 5), (-500, 500)]
 # bounds = [(-5, 5), (-5, 5)]
 n_iter_rs = 10000
-metropolis_calls = 10
-n_iter_sa = int(n_iter_rs/metropolis_calls)
-# num_runs = 30
-# n_iter = 5
 num_runs = 30
-temperature = 100
-cooling_rate = 0.92
+temperature = 700
+cooling_rate = 0.98
+metropolis_calls = 50
+n_iter_sa = int(n_iter_rs/metropolis_calls)
+
 
 # run the algorithm for each function and dimension for num_runs times
 all_best_fitness_rs = []
@@ -127,8 +126,10 @@ colors = ['red', 'blue', 'green', 'orange', 'purple', 'gray']
 # iterate over each function, dimension and bound
 for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     best_fitnesses_rs = []
+    best_solution_rs_all = []
     best_fitness_for_run_rs = []  # inicializace prázdného pole
     best_fitnesses_sa = []
+    best_solution_sa_all = []
     best_fitness_for_run_sa = []  # inicializace prázdného pole
     start_time = time.time()  # Get the current time
     # iterate over each run
@@ -136,6 +137,8 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     for j in range(num_runs):
         best_solution_rs, best_fitness_rs, fitness_progress_rs = random_search(func, dim, n_iter_rs, bound)
         best_solution_sa, best_fitness_sa, fitness_progress_sa = simulated_annealing(func, dim, n_iter_sa, bound, temperature, cooling_rate)
+        best_solution_rs_all.append(best_solution_rs)
+        best_solution_sa_all.append(best_solution_sa)
         best_fitnesses_rs.append(best_fitness_rs)
         best_fitnesses_sa.append(best_fitness_sa)
         best_fitness_for_run_rs.append(fitness_progress_rs)  # přidání hodnoty do pole
@@ -144,27 +147,36 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
         ax1.plot(fitness_progress_rs, color=colors[j % len(colors)], alpha=0.5)
         ax2.plot(fitness_progress_sa, color=colors[j % len(colors)], alpha=0.5)
 
+    # Find the index of the run with the lowest best_fitness_sa
+    min_fitness_idx_sa = best_fitnesses_sa.index(min(best_fitnesses_sa))
+    min_fitness_idx_rs = best_fitnesses_rs.index(min(best_fitnesses_rs))
+    # Print the best_solution_rs and best_solution_sa with the lowest best_fitness_sa value
+    # print(f"Best solution (random search): {best_solution_rs_all[min_fitness_idx_rs]}")
+    # print(f"Best fitness (random search): {best_fitnesses_rs[min_fitness_idx_rs]}")
+    # print(f"Best solution (simulated annealing): {best_solution_sa_all[min_fitness_idx_rs]}")
+    print(f"Best fitness {func.__name__}-{dim}: {best_fitnesses_sa[min_fitness_idx_sa]}")
+
     end_time = time.time()  # Get the current time again
     elapsed_time = end_time - start_time  # Calculate the elapsed time
-    print("Elapsed time:" + str(elapsed_time) + "seconds\n")
+    # print("Elapsed time:" + str(elapsed_time) + "seconds\n")
 
     # plot the best fitness value for each function and dimension
     all_best_fitness_rs.append(min(best_fitnesses_rs))
     all_best_fitness_sa.append(min(best_fitnesses_sa))
 
     # calculate statistics from the best fitness values of each run
-    print(f"Minimum: {func.__name__}-{dim} : {np.min(best_fitness_for_run_rs)}")
-    print(f"Maximum: {func.__name__}-{dim} : {np.max(best_fitness_for_run_rs)}")
-    print(f"Mean: {func.__name__}-{dim} : {np.mean(best_fitness_for_run_rs)}")
-    print(f"Median: {func.__name__}-{dim} : {np.median(best_fitness_for_run_rs)}")
-    print(f"Standard deviation: {func.__name__}-{dim} : {np.std(best_fitness_for_run_rs)}\n\n")
+    # print(f"Minimum: {func.__name__}-{dim} : {np.min(best_fitness_for_run_rs)}")
+    # print(f"Maximum: {func.__name__}-{dim} : {np.max(best_fitness_for_run_rs)}")
+    # print(f"Mean: {func.__name__}-{dim} : {np.mean(best_fitness_for_run_rs)}")
+    # print(f"Median: {func.__name__}-{dim} : {np.median(best_fitness_for_run_rs)}")
+    # print(f"Standard deviation: {func.__name__}-{dim} : {np.std(best_fitness_for_run_rs)}\n\n")
 
-    print(f"Minimum: {func.__name__}-{dim} : {np.min(best_fitness_for_run_sa)}")
-    print(f"Maximum: {func.__name__}-{dim} : {np.max(best_fitness_for_run_sa)}")
-    print(f"Mean: {func.__name__}-{dim} : {np.mean(best_fitness_for_run_sa)}")
-    print(f"Median: {func.__name__}-{dim} : {np.median(best_fitness_for_run_sa)}")
-    print(f"Standard deviation: {func.__name__}-{dim} : {np.std(best_fitness_for_run_sa)}\n\n")
-    # print(f"Cooling rate: {((final_temperature / initial_temperature) ** (1 / n_iter))}\n")
+    # print(f"Minimum: {func.__name__}-{dim} : {np.min(best_fitness_for_run_sa)}")
+    # print(f"Maximum: {func.__name__}-{dim} : {np.max(best_fitness_for_run_sa)}")
+    # print(f"Mean: {func.__name__}-{dim} : {np.mean(best_fitness_for_run_sa)}")
+    # print(f"Median: {func.__name__}-{dim} : {np.median(best_fitness_for_run_sa)}")
+    # print(f"Standard deviation: {func.__name__}-{dim} : {np.std(best_fitness_for_run_sa)}\n\n")
+    # print(f"Final temperature: {(temperature * (cooling_rate ** n_iter_sa))}\n")
 
     all_best_fitness_rs.clear()
     all_best_fitness_sa.clear()
@@ -193,9 +205,10 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
 
     mean_per_column_sa = np.mean(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
-
+    # plt.plot(np.arange(n_iter_rs), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
     min_per_column_sa = np.min(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
+    # plt.plot(np.arange(n_iter_rs), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
 
     # set the plot title and axis labels
     plt.title(f'{func.__name__}-{dim}')
