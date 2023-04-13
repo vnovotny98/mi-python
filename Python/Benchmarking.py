@@ -204,10 +204,10 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
 
     mean_per_column_sa = np.mean(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
-    plt.plot(np.arange(n_iter_rs), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
+    # plt.plot(np.arange(n_iter_rs), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
     min_per_column_sa = np.min(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
-    plt.plot(np.arange(n_iter_rs), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
+    # plt.plot(np.arange(n_iter_rs), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
 
     # set the plot title and axis labels
     plt.title(f'{func.__name__}-{dim}')
