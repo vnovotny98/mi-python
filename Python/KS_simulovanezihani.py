@@ -1,6 +1,6 @@
 import random
 import time
-
+import numpy as np
 
 def knapsack_simulated_annealing(values, weights, capacity, max_iterations, initial_temperature, cooling_factor):
     # inicializace aktuálního a nejlepšího řešení
@@ -32,7 +32,9 @@ def knapsack_simulated_annealing(values, weights, capacity, max_iterations, init
         # jinak přijmi ho s pravděpodobností určenou teplotou a rozdílem hodnoty
         else:
             delta = new_value - sum(values[j] for j in range(len(values)) if current_solution[j] == 1)
-            if random.random() < pow(2.71828, delta / temperature):
+            if new_weight > capacity:
+                current_solution = current_solution
+            elif random.random() < np.exp(delta / temperature):
                 current_solution = new_solution
 
         # aktualizace nejlepšího řešení

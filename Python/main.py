@@ -17,7 +17,7 @@ print("Pouzita kapacita pomocí Brute Force:", best_weight_rs)
 print("Kombinace předmětů pomocí Brute Force:", max_combination_rs)
 print("Celkový čas potřebný pro Brute Force:", total_time_rs)
 
-max_iterations = 100
+max_iterations = 10000
 initial_temperature = 100
 cooling_factor = 0.95
 
