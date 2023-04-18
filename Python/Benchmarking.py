@@ -98,18 +98,18 @@ def simulated_annealing(objective_func, dimensions, n_iter_f, bounds_f, temperat
 
 
 # set the parameters
-# dims = [5, 10]
-# functions = [dejong1, dejong1]
-# bounds = [(-5, 5), (-5, 5)]
+# dims = [10]
+# functions = [schwefel]
+# bounds = [(-500, 500)]
 dims = [5, 5, 5, 10, 10, 10]
 functions = [dejong1, dejong2, schwefel, dejong1, dejong2, schwefel]
 bounds = [(-5, 5), (-5, 5), (-500, 500), (-5, 5), (-5, 5), (-500, 500)]
 
 n_iter_rs = 10000
 num_runs = 30
-temperature = 700
+temperature = 250
 cooling_rate = 0.98
-metropolis_calls = 50
+metropolis_calls = 20
 n_iter_sa = int(n_iter_rs/metropolis_calls)
 
 
@@ -189,6 +189,9 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
     ax2.set_xlabel('Number of iterations')
     ax2.set_ylabel('Fitness')
 
+    # ax1.set_ylim(0, 5000)
+    # ax2.set_ylim(0, 5000)
+
     # save the plot
     plt.savefig(f'C:/Users/vnovotny/Documents/Matematická informatika/Benchmarking/{func.__name__}-{dim}-fitness'
                 f'-progress.png')
@@ -204,16 +207,16 @@ for i, (func, dim, bound) in enumerate(zip(functions, dims, bounds)):
 
     mean_per_column_sa = np.mean(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
-    # plt.plot(np.arange(n_iter_rs), mean_per_column_sa, marker='x', markersize=1, label='Mean-SA', color='red')
     min_per_column_sa = np.min(best_fitness_for_run_sa, axis=0)
     plt.plot(np.arange(n_iter_rs+1), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
-    # plt.plot(np.arange(n_iter_rs), min_per_column_sa, marker='o', markersize=1, label='Min-SA', color='gray')
 
     # set the plot title and axis labels
     plt.title(f'{func.__name__}-{dim}')
     plt.xlabel('Number of iterations')
     plt.ylabel('Fitness')
     plt.legend()
+
+    # plt.ylim(0, 4000)
 
     # save the plot
     plt.savefig(f'C:/Users/vnovotny/Documents/Matematická informatika/Benchmarking/{func.__name__}-{dim}-min-mean.png')
