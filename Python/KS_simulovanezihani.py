@@ -2,6 +2,7 @@ import random
 import time
 import numpy as np
 
+
 def knapsack_simulated_annealing(values, weights, capacity, max_iterations, initial_temperature, cooling_factor):
     # inicializace aktuálního a nejlepšího řešení
     current_solution = [0] * len(values)

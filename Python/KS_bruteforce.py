@@ -1,7 +1,6 @@
 import itertools
 import time
 
-
 def knapsack_brute_force(values, weights, capacity):
     # inicializace maximální hodnoty a kombinace předmětů
     max_value = 0
@@ -11,6 +10,9 @@ def knapsack_brute_force(values, weights, capacity):
 
     # start stopky
     start_time = time.time()
+
+    # inicializace seznamu průběhu hodnot
+    value_progress = []
 
     # projití všech možných kombinací předmětů
     for i in range(1, len(values) + 1):
@@ -27,6 +29,9 @@ def knapsack_brute_force(values, weights, capacity):
                 best_weight = combination_weight
                 max_combination = combination
 
+            # přidání aktuální hodnoty do seznamu průběhu hodnot
+            value_progress.append(max_value)
+
     # konec stopky
     end_time = time.time()
 
@@ -34,4 +39,4 @@ def knapsack_brute_force(values, weights, capacity):
     total_time = end_time - start_time
 
     # vrácení maximální hodnoty a kombinace
-    return max_value, best_weight, max_combination, total_time, num_iterations
+    return max_value, best_weight, max_combination, total_time, num_iterations, value_progress
