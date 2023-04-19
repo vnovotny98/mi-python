@@ -11,21 +11,21 @@ def generate_knapsack_instance():
     values = []
 
     # generování náhodných váh a hodnot předmětů
-    for i in range(n_items):
+    for i in range(1, n_items+1):
         weights.append(random.randint(1, 50))
         values.append(random.randint(1, 50))
 
     # výpočet celkové váhy a hodnoty předmětů a výpis včetně jejich ID
     total_weight = 0
     total_value = 0
-    for i in range(n_items):
-        total_weight += weights[i]
-        total_value += values[i]
-        print("ID:", i+1, "Objem:", weights[i], "Cena:", values[i])
+    for i in range(1, n_items+1):
+        total_weight += weights[i-1]
+        total_value += values[i-1]
+        print("ID:", i, "Objem:", weights[i-1], "Cena:", values[i-1])
 
     # kontrola, zda kapacita batohu není menší než celkový objem předmětů - nemělo by cenu pak pouštět algoritmy
-    if capacity < total_weight:
-        print("Kapacita batohu je menší než celkový objem předmětů!")
+    # if capacity < total_weight:
+        # print("Kapacita batohu je menší než celkový objem předmětů! - má cenu řešit")
 
     # výpis celkového kapacity a hodnoty předmětů
     print("Celková hodnota:", total_value)

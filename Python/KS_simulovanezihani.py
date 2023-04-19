@@ -8,6 +8,7 @@ def knapsack_simulated_annealing(values, weights, capacity, max_iterations, init
     best_solution = None
     best_value = 0
     best_weight = 0
+    num_iterations = 0
 
     # inicializace teploty
     temperature = initial_temperature
@@ -19,6 +20,8 @@ def knapsack_simulated_annealing(values, weights, capacity, max_iterations, init
     for i in range(max_iterations):
         # vygenerování nového náhodného řešení
         new_solution = [random.randint(0, 1) for _ in range(len(values))]
+
+        num_iterations += 1
 
         # výpočet hodnoty a váhy nového řešení
         new_value = sum(values[j] for j in range(len(values)) if new_solution[j] == 1)
@@ -55,4 +58,4 @@ def knapsack_simulated_annealing(values, weights, capacity, max_iterations, init
     # vrácení nejlepšího řešení
     # return best_value, best_weight, [i+1 for i in range(len(best_solution)) if best_solution[i] == 1], total_time
 
-    return best_value, best_weight, best_solution, total_time
+    return best_value, best_weight, best_solution, total_time, num_iterations
